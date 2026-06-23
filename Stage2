@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Notification Center</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI,sans-serif;
+}
+
+body{
+    background:#f4f7fc;
+    padding:30px;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.title{
+    font-size:32px;
+    font-weight:700;
+}
+
+.stats{
+    display:flex;
+    gap:15px;
+}
+
+.stat{
+    background:white;
+    padding:15px 25px;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.filters{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+button{
+    border:none;
+    padding:10px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.active{
+    background:#1976d2;
+    color:white;
+}
+
+.notification-list{
+    display:grid;
+    gap:15px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+}
+
+.left{
+    display:flex;
+    gap:15px;
+    align-items:center;
+}
+
+.icon{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    font-weight:bold;
+}
+
+.placement{
+    background:#4caf50;
+}
+
+.result{
+    background:#2196f3;
+}
+
+.event{
+    background:#ff9800;
+}
+
+.message{
+    font-weight:600;
+}
+
+.time{
+    color:gray;
+    font-size:13px;
+}
+
+.badge{
+    padding:6px 10px;
+    border-radius:20px;
+    color:white;
+    font-size:12px;
+}
+
+.high{
+    background:#d32f2f;
+}
+
+.medium{
+    background:#f57c00;
+}
+
+.low{
+    background:#388e3c;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1 class="title">Notification Center</h1>
+
+        <div class="stats">
+            <div class="stat">
+                <h3 id="total">0</h3>
+                <small>Total</small>
+            </div>
+
+            <div class="stat">
+                <h3 id="unread">0</h3>
+                <small>Unread</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="filters">
+        <button class="active" onclick="filterData('all')">All</button>
+        <button onclick="filterData('Placement')">Placement</button>
+        <button onclick="filterData('Result')">Result</button>
+        <button onclick="filterData('Event')">Event</button>
+    </div>
+
+    <div class="notification-list" id="list"></div>
+
+</div>
+
+<script>
+
+const notifications = [
+{
+type:"Placement",
+message:"Company hiring drive announced",
+time:"2 mins ago",
+priority:"high"
+},
+{
+type:"Result",
+message:"Mid semester result published",
+time:"15 mins ago",
+priority:"medium"
+},
+{
+type:"Event",
+message:"Tech Fest Registration Open",
+time:"1 hour ago",
+priority:"low"
+},
+{
+type:"Placement",
+message:"Internship opportunity available",
+time:"3 hours ago",
+priority:"high"
+}
+];
+
+function render(data){
+
+const list = document.getElementById("list");
+
+list.innerHTML = "";
+
+data.forEach(item=>{
+
+let colorClass =
+item.type === "Placement"
+? "placement"
+: item.type === "Result"
+? "result"
+: "event";
+
+list.innerHTML += `
+<div class="card">
+
+<div class="left">
+
+<div class="icon ${colorClass}">
+${item.type[0]}
+</div>
+
+<div>
+<div class="message">${item.message}</div>
+<div class="time">${item.time}</div>
+</div>
+
+</div>
+
+<div class="badge ${item.priority}">
+${item.priority.toUpperCase()}
+</div>
+
+</div>
+`;
+});
+
+document.getElementById("total").innerText =
+notifications.length;
+
+document.getElementById("unread").innerText =
+notifications.length;
+}
+
+function filterData(type){
+
+if(type==="all"){
+render(notifications);
+return;
+}
+
+const filtered =
+notifications.filter(n=>n.type===type);
+
+render(filtered);
+}
+
+render(notifications);
+
+</script>
+
+</body>
+</html>
